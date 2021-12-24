@@ -1,0 +1,15 @@
+﻿@model IEnumerable<CnWeb_FastFood.Models.EF.Category>
+
+<div class="section-title">
+    <h2>Bookshop product list</h2>
+</div>
+<div class="featured__controls">
+    <ul>
+        <li class="active" data-filter="*">All</li>
+        @foreach (var item in Model)
+        {
+            var filterName = ".c" + item.id_category;
+            <li data-filter="@filterName">@item.name</li>
+        }
+    </ul>
+</div>

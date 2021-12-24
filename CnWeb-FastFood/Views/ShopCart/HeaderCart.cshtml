@@ -1,0 +1,11 @@
+﻿@model List<CnWeb_FastFood.Models.CartItem>
+
+
+<div class="col-lg-3">
+    <div class="header__cart">
+        <ul>
+            <li><a href="/ShopCart/Index"><i class="fa fa-shopping-cart"></i> <span id="txtCountCart">@Session["Count"]</span></a></li>
+        </ul>
+        <div class="header__cart__price">Total bill:&nbsp;<span id="txtTotal">@Session["TotalCartSession"]</span>&nbsp;VNĐ</div>
+    </div>
+</div>

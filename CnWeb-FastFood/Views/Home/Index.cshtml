@@ -1,0 +1,139 @@
+﻿@model PagedList.IPagedList<CnWeb_FastFood.Models.ProductView>
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Index";
+    Layout = "/Views/Shared/_MainLayout.cshtml";
+}
+
+@section Title{
+    Bookshop | Home
+}
+
+@section Styles
+{
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/Assets/Client/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/Assets/Client/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/Assets/Client/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="/Assets/Client/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/Assets/Client/css/slicknav.min.css" type="text/css">
+    @Styles.Render("~/bundles/css/base")
+}
+
+@Html.Partial("_BeginContentLayoutHome")
+
+<div class="container">
+
+    @Html.Partial("ProductSearchShow")
+
+</div>
+
+<!-- Categories Section Begin -->
+<section class="categories">
+    <div class="container">
+
+        @Html.Action("CategoryShowImage")
+
+    </div>
+</section>
+<!-- Categories Section End -->
+<!-- Featured Section Begin -->
+<section class="featured spad">
+    <div class="container">
+        @Html.Action("ListCategoryShow")
+
+        <div class="row featured__filter">
+            @foreach (var item in Model)
+            {
+                var filterName = "c" + item.id_category;
+                <div class="col-lg-3 col-md-4 col-sm-6 mix @filterName">
+                    <div class="featured__item">
+                        <div class="featured__item__pic set-bg" data-setbg="/Areas/Admin/Content/Photos/@item.mainPhoto">
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="/ShopDetail/Index/@item.id_product"><i class="fa fa-info"></i></a></li>
+                                <li><a href="/ShopCart/AddItem?productId=@item.id_product&quantity=1"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="featured__item__text">
+                            <h6><a href="/ShopDetail/Index/@item.id_product">@item.productName</a></h6>
+                            <h5>@item.salePrice VNĐ</h5>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <!-- phân trang -->
+        <div class="row dataTables_wrapper">
+
+
+            <div>
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, pageSize = ViewBag.psize, @searching = @ViewBag.SearchString }), new PagedListRenderOptions
+            {
+
+                ContainerDivClasses = new string[] { "dataTables_paginate", "paging_simple_numbers" },
+                LiElementClasses = new string[] { "paginate_button", "page-item" }
+
+            })
+            </div>
+            <div class="ml-auto">
+                <b style="color:navy">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount &nbsp;&nbsp;-&nbsp;&nbsp;
+                    @if (Model.Count == ViewBag.psize)
+                    {
+                        <span>Showing (@(((Model.PageNumber * Model.Count) - Model.Count) + 1)-<span class="countItemofPage">@(Model.PageNumber * Model.Count)</span>) / <span class="countItem">@ViewBag.Count</span></span>
+                    }
+                    else
+                    {
+                        <span>Showing (@((ViewBag.Count - Model.Count) + 1)-<span class="countItem">@ViewBag.Count</span>) / <span class="countItem">@ViewBag.Count</span></span>
+                    }
+                </b>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Featured Section End -->
+<!-- Latest Product Section Begin -->
+<section class="latest-product spad">
+    <div class="container">
+        <div class="row">
+
+            @Html.Action("LatestProducts")
+
+            @Html.Action("TopRatedProducts")
+
+            @Html.Action("TopViewProducts")
+
+        </div>
+    </div>
+</section>
+<!-- Latest Product Section End -->
+
+
+@section Scripts
+{
+    <script src="/Assets/Client/js/jquery-3.3.1.min.js"></script>
+    <script src="/Assets/Client/js/bootstrap.min.js"></script>
+    <script src="/Assets/Client/js/jquery.nice-select.min.js"></script>
+    <script src="/Assets/Client/js/jquery-ui.min.js"></script>
+    <script src="/Assets/Client/js/jquery.slicknav.js"></script>
+    <script src="/Assets/Client/js/mixitup.min.js"></script>
+    <script src="/Assets/Client/js/owl.carousel.min.js"></script>
+    <script src="/Assets/Client/js/main.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            $('.MenuHome').attr("class", "active");
+        }
+        $(function () {
+            //load data with change pagesize
+            $("#PageSize").change(function () {
+                $("#form1").submit();
+            });
+            //-------------//
+
+            // set class css for ỉtemPage- because pagelist not compatial boostrap 4 in this version of adminLTE
+            $('.pagination a').addClass('page-link');
+            //-------------//
+        });
+    </script>
+}
